@@ -9,13 +9,13 @@ cron when I'm working on an important pad to make sure I don't lose anything.
 
 Usage
 -----
-1. mkdir ~/etherpad-saver
-2. cd ~/etherpad-saver
-3. git init
-
-4. Edit etherpad-saver.sh with the URL you wish to save (hint: grab the "export
-   as text" URL from the etherpad)
-
+0. Install git and wget if they're not already available
+1. Edit the URL parameter to point to the base URL of the etherpad instance to
+   be backed up (default is https://pad.riseup.net/p - note no trailing '/')
+2. Edit the LOCALDIR parameter to point to the local directory for backups
+   (default is ~/etherpad-saver/)
+3. Set the PAD paramter to the ID of the pad you want to back up.
+4. Set the format to either txt or html (default is txt)
 5. chmod +x etherpad-saver.sh
 6. Run etherpad-saver.sh
 
