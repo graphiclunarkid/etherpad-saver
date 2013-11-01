@@ -15,13 +15,13 @@ wget $WGET_OPTS -P $LOCALDIR $URL/$PAD/export/$FORMAT
 (
 	cd $LOCALDIR
 
-	if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+	if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1 ; then
 		git init -q
 	fi
 
 	git update-index -q --refresh
 
-	if ! git diff-index --quiet HEAD -- > /dev/null 2>&1; then
+	if ! git diff-index --quiet HEAD -- > /dev/null 2>&1 ; then
 		git add .
 		git commit -a -m"Change detected - automatic commit"
 	fi
