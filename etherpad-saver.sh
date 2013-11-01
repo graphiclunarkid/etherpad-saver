@@ -6,6 +6,10 @@ FORMAT=txt
 WGET_OPTS="-N --no-check-certificate -nd"
 LOCALDIR=(~/etherpad-saver/)
 
+if [ ! -d $LOCALDIR ] ; then
+	mkdir -p $LOCALDIR
+fi
+
 wget $WGET_OPTS -P $LOCALDIR $URL/$PAD/export/$FORMAT
 
 (
