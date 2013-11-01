@@ -1,9 +1,15 @@
 #!/bin/bash
 
-wget -N --no-check-certificate -nd -P ~/etherpad-saver/ https://pad.riseup.net/p/B7VT41OAfOe3/export/txt
+URL=https://pad.riseup.net/p
+PAD=B7VT41OAfOe3
+FORMAT=txt
+WGET_OPTS="-N --no-check-certificate -nd"
+LOCALDIR=(~/etherpad-saver/)
+
+wget $WGET_OPTS -P $LOCALDIR $URL/$PAD/export/$FORMAT
 
 (
-	cd ~/etherpad-saver/
+	cd $LOCALDIR
 	git update-index -q --refresh
 	if ! git diff-index --quiet HEAD --; then
 		git add .
