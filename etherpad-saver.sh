@@ -21,7 +21,7 @@ wget $WGET_OPTS -P $LOCALDIR $URL/$PAD/export/$FORMAT
 
 	git update-index -q --refresh
 
-	if ! git diff-index --quiet HEAD --; then
+	if ! git diff-index --quiet HEAD -- > /dev/null 2>&1; then
 		git add .
 		git commit -a -m"Change detected - automatic commit"
 	fi
