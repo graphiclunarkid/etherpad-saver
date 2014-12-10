@@ -30,6 +30,8 @@ do
    #Test internet connection. Prevent erasure of the files if there is no.
    if [ "$?" = "0" ]; then
 	mv $CLEAN_URL.$FORMAT.temp $LOCALDIR$CLEAN_URL.$FORMAT
+   else
+	rm $CLEAN_URL.$FORMAT.temp
    fi
 	
    (
