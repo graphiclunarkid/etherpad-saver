@@ -7,23 +7,24 @@ screws up so you can't get it back. So I wrote this script to grab copies of an
 etherpad page (or similar) and keep track of changes using git. I run it from
 cron when I'm working on an important pad to make sure I don't lose anything.
 
+Pads are saved on filenames related to their URL. For this purpose, URL "/" have 
+been replaced by "\" to for valid *nix filenames. 
+
 Usage
 -----
 0. Install git and wget if they're not already available
-1. Edit the URL parameter to point to the base URL of the etherpad instance to
-   be backed up (default is https://pad.riseup.net/p - note no trailing '/')
+1. Edit list_pad.txt. Put pads URL (one by line).
 2. Edit the LOCALDIR parameter to point to the local directory for backups
    (default is ~/etherpad-saver/)
-3. Set the PAD paramter to the ID of the pad you want to back up.
-4. Set the format to either txt or html (default is txt)
-5. chmod +x etherpad-saver.sh
-6. Run etherpad-saver.sh
+3. Set the format to either txt or html (default is txt)
+4. chmod +x etherpad-saver-multi.sh
+5. Run etherpad-saver-multi.sh
 
 Scheduling snapshots
 --------------------
 Run crontab -e and append the following line (or similar):
 
-*/10 * * * * /home/user/path/to/etherpad-saver.sh > /dev/null 2>&1
+*/10 * * * * /home/user/path/to/etherpad-saver-multi.sh > /dev/null 2>&1
 
 This will run the script every 10 minutes. Nothing happens if the pad hasn't
 changed. If it has changed the new version will be downloaded and committed to
