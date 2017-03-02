@@ -1,24 +1,35 @@
 #!/bin/bash
 #
-# Automatic download of a list of pads where there urls are containted in the file list_pad.txt (one by line)
+# Automatic download of a list of pads where there urls are containted
+# in the file list_pad.conf (one by line)
 #
 
-FORMAT=txt
-LOCALDIR=(~/etherpad-saver/)  # edit this line to match where you want to have your data saved
+. etherpad_saver.conf
+
 WGET_OPTS="-N --no-check-certificate -nd"
 WGET="/usr/bin/wget"
 
+# make sure LOCALDIR exists
 if [ ! -d $LOCALDIR ] ; then
    mkdir -p $LOCALDIR
 fi
 
+# Initialize git if necessary
+[[ -d "${LOCALDIR}/.git" ]] || git init "${LOCALDIR}"
+
 # download each of the pads
-# url of the pads are contained on the file list_pad.txt
-#
-for line in $(cat list_pad.txt)          
-do          
+# url of the pads are contained on the file list_pad.conf
+while read line
+do
+    line="${line#"${line%%[![:space:]]*}"}"
+    if [[ "$line"x == x || "$line" == "#"* ]]; then
+        continue
+    fi
+
    URL=$(echo $line | sed s,/[^/]*$,,)
-   CLEAN_URL=$(echo $line | tr '/' '\')  # replace the "/" in the url by "\" for a *nix compatible filename
+     # replace the "/" in the url by "." for a *nix compatible filename
+   CLEAN_URL=$(echo $line | tr '/' '.')
+   CLEAN_URL="${CLEAN_URL##*:..}"
    PAD=$(echo $line | sed s,^.*/,,)
 
    if [[ $URL =~ .*etherpad.* ]]; then
@@ -29,11 +40,11 @@ do
 
    #Test internet connection. Prevent erasure of the files if there is no.
    if [ "$?" = "0" ]; then
-	mv $CLEAN_URL.$FORMAT.temp $LOCALDIR$CLEAN_URL.$FORMAT
+       mv $CLEAN_URL.$FORMAT.temp $LOCALDIR$CLEAN_URL.$FORMAT
    else
-	rm $CLEAN_URL.$FORMAT.temp
+       rm $CLEAN_URL.$FORMAT.temp
    fi
-	
+
    (
       cd $LOCALDIR
 
@@ -52,9 +63,9 @@ do
        git commit -a -m"$PAD Change detected - automatic commit"
 
     )
-	
 
-done          
+
+done < list_pad.conf
 
 
 
