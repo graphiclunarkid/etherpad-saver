@@ -9,13 +9,16 @@
 WGET_OPTS="-N --no-check-certificate -nd"
 WGET="/usr/bin/wget"
 
+# make sure LOCALDIR exists
 if [ ! -d $LOCALDIR ] ; then
    mkdir -p $LOCALDIR
 fi
 
+# Initialize git if necessary
+[[ -d "${LOCALDIR}/.git" ]] || git init "${LOCALDIR}"
+
 # download each of the pads
-# url of the pads are contained on the file list_pad.txt
-#
+# url of the pads are contained on the file list_pad.conf
 while read line
 do
     line="${line#"${line%%[![:space:]]*}"}"
@@ -26,6 +29,7 @@ do
    URL=$(echo $line | sed s,/[^/]*$,,)
      # replace the "/" in the url by "." for a *nix compatible filename
    CLEAN_URL=$(echo $line | tr '/' '.')
+   CLEAN_URL="${CLEAN_URL##*:..}"
    PAD=$(echo $line | sed s,^.*/,,)
 
    if [[ $URL =~ .*etherpad.* ]]; then
